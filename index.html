@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Habit Tracker</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: Arial, sans-serif;
+    }
+    header {
+      background-color: #2fc0b1;
+      color: #fff;
+      padding: 20px;
+      text-align: center;
+    }
+    h1 {
+      margin: 0;
+    }
+    main {
+      padding: 20px;
+    }
+    form {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    label {
+      margin-bottom: 10px;
+    }
+    input[type="text"] {
+      padding: 10px;
+      font-size: 18px;
+      margin-bottom: 10px;
+    }
+    input[type="submit"] {
+      padding: 10px 20px;
+      background-color: #333;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      font-size: 18px;
+      cursor: pointer;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    th, td {
+      padding: 8px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+    }
+    th {
+      background-color: #ddd;
+    }
+    .habit-progress {
+      height: 20px;
+      width: 100%;
+      background-color: #ddd;
+      border-radius: 10px;
+      overflow: hidden;
+      margin-top: 10px;
+    }
+    .habit-progress-bar {
+      height: 100%;
+      background-color: green;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Habit Tracker</h1>
+  </header>
+  <main>
+    <form id="add-habit-form">
+      <label for="habit-name">Habit Name:</label>
+      <input type="text" id="habit-name" name="habit-name">
+      <input type="submit" value="Add Habit">
+    </form>
+    <table id="habit-table">
+      <thead>
+        <tr>
+          <th>Habit Name</th>
+          <th>Progress</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody id="habit-data">
+        <!-- Add habit data here -->
+      </tbody>
+    </table>
+  </main>
+  <script>
+    
+
+    const addHabitForm = document.getElementById("add-habit-form");
+    const habitData = document.getElementById("habit-data");
+
+    addHabitForm.addEventListener("submit", (event) => {
+      event.preventDefault();
+
+      const habitName = document.getElementById("habit-name").value;
+      const newHabit = createHabit(habitName);
+
+      habitData.appendChild(newHabit);
+    });
+
+    function createHabit(habitName) {
+      const habitRow = document.createElement("tr");
+
+      const nameCell = document.createElement("td");
+      nameCell.textContent = habitName;
+
+      const progressCell = document.createElement("td");
+      const progressBar = document.createElement("div");
+      progressBar.classList.add("habit-progress");
+
+      const progress = document.createElement("div");
+      progress.classList.add("habit-progress-bar");
+      progress.style.width = "0%";
+      progressBar.appendChild(progress);
+
+      progressCell.appendChild(progressBar);
+
+      const actionsCell = document.createElement("td");
+      const increaseButton = document.createElement("button");
+      increaseButton.textContent = "Increase";
+      increaseButton.addEventListener("click", () => {
+        let currentWidth = parseInt(progress.style.width.split("%")[0]);
+        currentWidth += 10;
+        progress.style.width = `${currentWidth}%`;
+
+        if (currentWidth < 50) {
+          progress.style.backgroundColor = "red";
+        } else {
+          progress.style.backgroundColor = "green";
+        }
+      });
+
+      const decreaseButton = document.createElement("button");
+      decreaseButton.textContent = "Decrease";
+      decreaseButton.addEventListener("click", () => {
+        let currentWidth = parseInt(progress.style.width.split("%")[0]);
+        currentWidth -= 10;
+        progress.style.width = `${currentWidth}%`;
+
+        if (currentWidth < 50) {
+          progress.style.backgroundColor = "red";
+        } else {
+          progress.style.backgroundColor = "green";
+        }
+      });
+
+      actionsCell.appendChild(increaseButton);
+      actionsCell.appendChild(decreaseButton);
+
+      habitRow.appendChild(nameCell);
+      habitRow.appendChild(progressCell);
+      habitRow.appendChild(actionsCell);
+
+      return habitRow;
+    }
+  </script>
+</body>
+</html>
+
